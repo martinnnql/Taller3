@@ -12,10 +12,11 @@ public class App {
 	static ArrayList<Mago> magos = new ArrayList<>();
 
 	public static void main(String[] args) throws FileNotFoundException {
-
-		cargarMagos();
 		cargarHechizos();
-
+		cargarMagos();
+		
+		
+		
 		boolean condicion = false;
 		int opcionMenu1 = cargarMenu1();
 
@@ -81,27 +82,86 @@ public class App {
 
 	private static void mostrarMagosConPuntuacion() {
 		// TODO Auto-generated method stub
-
+		int cont = 1;
+		System.out.println(" - - - MAGOS - - - ");
+		System.out.println();
+		for (Mago mago : magos) {
+			System.out.println(cont + ") " + mago.getNombre() + " | Puntuación: " + mago.calcularPuntuacion());
+			cont ++;
+		}
 	}
 
 	private static void mostrarHechizoConPuntuacion() {
 		// TODO Auto-generated method stub
-
+		int cont = 1;
+		System.out.println(" - - - HECHIZOS - - - ");
+		System.out.println();
+		for (Hechizo hechizo : hechizos) {
+			System.out.println(cont + ") " + hechizo.getNombre() + " | Puntuación: " + hechizo.calcularPuntuacion());
+			cont ++;
+		}
 	}
 
 	private static void mostrarMagos() {
 		// TODO Auto-generated method stub
+		int cont = 1;
+		System.out.println(" - - - MAGOS - - - ");
+		System.out.println();
+		for (Mago mago : magos) {
+			System.out.println(cont + ") " + mago.getNombre());
+			cont ++;
+		}
 
 	}
 
 	private static void mostrarHechizos() {
 		// TODO Auto-generated method stub
+		int cont = 1;
+		System.out.println(" - - - HECHIZOS - - - ");
+		System.out.println();
+		for (Hechizo hechizo : hechizos) {
+			System.out.println(cont + ") " + hechizo.getNombre());
+			cont ++;
+		}
 
 	}
 
 	private static void mostrarTop3Magos() {
 		// TODO Auto-generated method stub
+		ordenarMagos();
+		boolean condicion = true;
+		int cont = 1;
+		System.out.println(" - - - TOP 3 MEJORES MAGOS - - -");
+		System.out.println("");
 
+		while (condicion) {
+			for (Mago mago : magos) {
+				System.out.println(cont + ") " + mago.getNombre() + " | Puntuación: " + mago.calcularPuntuacion());
+				cont++;
+
+				if (cont == 4) {
+					condicion = false;
+					break;
+				}
+			}
+
+		}
+		
+
+	}
+
+	private static void ordenarMagos() {
+		for (int i = 0; i < magos.size() - 1; i++) {
+			for (int j = 0; j < magos.size() - 1 - i; j++) {
+
+				if (magos.get(j).calcularPuntuacion() < magos.get(j + 1).calcularPuntuacion()) {
+
+					Mago aux = magos.get(j);
+					magos.set(j, magos.get(j + 1));
+					magos.set(j + 1, aux);
+				}
+			}
+		}		
 	}
 
 	private static void mostrarTop10Hechizos() {
@@ -316,7 +376,7 @@ public class App {
 
 			String nombre = partes[0];
 
-			String[] partesHechizos = partes[1].split("|");
+			String[] partesHechizos = partes[1].split("\\|");
 			ArrayList<Hechizo> hechizosMago = new ArrayList<>();
 
 			for (String hechizo : partesHechizos) {

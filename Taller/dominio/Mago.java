@@ -2,10 +2,10 @@ package dominio;
 
 import java.util.ArrayList;
 
-public class Mago implements Calculador{
+public class Mago implements Calculador {
 	private String nombre;
 	private ArrayList<Hechizo> hechizos;
-	
+
 	public Mago(String nombre, ArrayList<Hechizo> hechizos) {
 		super();
 		this.nombre = nombre;
@@ -27,7 +27,7 @@ public class Mago implements Calculador{
 	public void setHechizos(ArrayList<Hechizo> hechizos) {
 		this.hechizos = hechizos;
 	}
-	
+
 	public void añadirHechizo(Hechizo hechizo) {
 		hechizos.add(hechizo);
 	}
@@ -38,18 +38,19 @@ public class Mago implements Calculador{
 		for (Hechizo hechizo : hechizos) {
 			if (hechizo instanceof HechizoFuego) {
 				puntuacion += ((HechizoFuego) hechizo).calcularPuntuacion();
-				
-			}else if (hechizo instanceof HechizoTierra) {
-					puntuacion += ((HechizoTierra) hechizo).calcularPuntuacion();
-			
+
+			} else if (hechizo instanceof HechizoTierra) {
+				puntuacion += ((HechizoTierra) hechizo).calcularPuntuacion();
+
 			} else if (hechizo instanceof HechizoPlanta) {
-					puntuacion += ((HechizoPlanta) hechizo).calcularPuntuacion();
-					
+				puntuacion += ((HechizoPlanta) hechizo).calcularPuntuacion();
+
 			} else if (hechizo instanceof HechizoAgua) {
-					puntuacion += ((HechizoAgua) hechizo).calcularPuntuacion();
+				puntuacion += ((HechizoAgua) hechizo).calcularPuntuacion();
 			}
+
 		}
 		return puntuacion;
-		
+
 	}
 }
