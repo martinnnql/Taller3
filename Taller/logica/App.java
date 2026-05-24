@@ -2,8 +2,11 @@ package logica;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import dominio.*;
 
@@ -11,7 +14,7 @@ public class App {
 	static ArrayList<Hechizo> hechizos = new ArrayList<>();
 	static ArrayList<Mago> magos = new ArrayList<>();
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		cargarHechizos();
 		cargarMagos();
 		
@@ -227,9 +230,91 @@ public class App {
 
 	}
 
-	private static void agregarMago() {
+	private static void agregarMago() throws IOException {
 		// TODO Auto-generated method stub
+		Scanner s = new Scanner(System.in);
+		
+		System.out.println("- - - NUEVO MAGO - - - ");
+		System.out.println("\nIngrese el nombre del mago: ");
+		System.out.print("> ");
+		String nombreNuevoMago = s.nextLine();
+	
+		int cantHechizos = cantHechizos();
+		
+		// mostrar hechizos numerados para escoger
+		int cont = 1;
+		System.out.println(" - - - HECHIZOS - - - ");
+		System.out.println();
+		for (Hechizo hechizo : hechizos) {
+			System.out.println(cont + ") " + hechizo.getNombre());
+			cont ++;
+		}
+		System.out.println("\nIngrese el nombre de  " + cantHechizos + " hechizos para el mago: ");
+		
+		ArrayList<Hechizo> hechizosMago = new ArrayList<>();
 
+		
+		for (int i = 0; i < cantHechizos; i++) {
+			System.out.print("> ");
+			String nombreHechizo = s.nextLine();
+			
+			Hechizo hechizoN = buscarHechizo(nombreHechizo);
+			
+				hechizosMago.add(hechizoN);
+
+			
+		}
+		
+		Mago nuevoMago = new Mago(nombreNuevoMago, hechizosMago);
+		magos.add(nuevoMago);
+		
+		// guardar mago
+		BufferedWriter  bf = new BufferedWriter(new FileWriter("Magos.txt", true));
+		String linea = nombreNuevoMago + ";";
+		
+		for (int i = 0; i < hechizosMago.size(); i++) {
+			
+			linea += hechizosMago.get(i).getNombre();
+			
+			if (i< hechizosMago.size() - 1) {
+				linea += "|";
+			}
+		}
+		bf.newLine();
+		bf.write(linea);	
+		bf.close();
+		
+		System.out.println("Mago creado con exito !!");
+		
+	}
+
+	private static int cantHechizos() {
+		Scanner s = new Scanner(System.in);
+		boolean condicion = false;
+		int cantHechizos = 0;
+		while (!condicion) {
+			try {
+				System.out.println("Ingrese la cantidad de hechizos que dominará el mago: ");
+				System.out.print("> ");
+				cantHechizos = s.nextInt();
+				s.nextLine();
+				
+				if (cantHechizos <= hechizos.size() && cantHechizos >= 1) {
+					condicion = true;
+				} else if (cantHechizos < 1) {
+					System.err.println("\nUn mago debe conocer al menos 1 hechizo!!");
+					
+				} else if (cantHechizos > hechizos.size()) {
+					System.err.println("\nSolo existen " + hechizos.size() + " hechizos!");
+				}
+					
+			} catch (Exception e) {
+				System.err.println("\nIngrese un valor valido.");
+				s.nextLine();			
+				}
+		}
+
+		return cantHechizos;
 	}
 
 	private static int cargarMenuAnalista() {
