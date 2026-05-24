@@ -16,54 +16,67 @@ public class App {
 		cargarMagos();
 		cargarHechizos();
 
+		boolean condicion = false;
 		int opcionMenu1 = cargarMenu1();
 
-		if (opcionMenu1 == 1) {
-			int opcionMenuAdmin = cargarMenuAdmin();
+		while (!condicion) {
+			if (opcionMenu1 == 1) {
+				int opcionMenuAdmin = cargarMenuAdmin();
+				
+				if (opcionMenuAdmin == 7) {
+					System.out.println("Saliendo . . .");
+					condicion = true;
+				}
+				
+				if (opcionMenuAdmin == 1) {
+					agregarMago();
 
-			if (opcionMenuAdmin == 1) {
-				agregarMago();
+				} else if (opcionMenuAdmin == 2) {
+					modificarMago();
 
-			} else if (opcionMenuAdmin == 2) {
-				modificarMago();
+				} else if (opcionMenuAdmin == 3) {
+					eliminarMago();
 
-			} else if (opcionMenuAdmin == 3) {
-				eliminarMago();
+				} else if (opcionMenuAdmin == 4) {
+					agregarHechizo();
 
-			} else if (opcionMenuAdmin == 4) {
-				agregarHechizo();
+				} else if (opcionMenuAdmin == 5) {
+					modificarHechizo();
 
-			} else if (opcionMenuAdmin == 5) {
-				modificarHechizo();
-
-			} else if (opcionMenuAdmin == 6) {
-				eliminarHechizo();
+				} else if (opcionMenuAdmin == 6) {
+					eliminarHechizo();
+				}
 			}
-		}
 
-		if (opcionMenu1 == 2) {
-			int opcionMenuAnalista = cargarMenuAnalista();
+			if (opcionMenu1 == 2) {
+				int opcionMenuAnalista = cargarMenuAnalista();
+				
+				if (opcionMenuAnalista == 7) {
+					System.out.println("Saliendo . . .");
+					condicion = true;
+				}
+				
+				if (opcionMenuAnalista == 1) {
+					mostrarTop10Hechizos();
 
-			if (opcionMenuAnalista == 1) {
-				mostrarTop10Hechizos();
+				} else if (opcionMenuAnalista == 2) {
+					mostrarTop3Magos();
 
-			} else if (opcionMenuAnalista == 2) {
-				mostrarTop3Magos();
+				} else if (opcionMenuAnalista == 3) {
+					mostrarHechizos();
 
-			} else if (opcionMenuAnalista == 3) {
-				mostrarHechizos();
+				} else if (opcionMenuAnalista == 4) {
+					mostrarMagos();
 
-			} else if (opcionMenuAnalista == 4) {
-				mostrarMagos();
+				} else if (opcionMenuAnalista == 5) {
+					mostrarHechizoConPuntuacion();
 
-			} else if (opcionMenuAnalista == 5) {
-				mostrarHechizoConPuntuacion();
-
-			} else if (opcionMenuAnalista == 6) {
-				mostrarMagosConPuntuacion();
+				} else if (opcionMenuAnalista == 6) {
+					mostrarMagosConPuntuacion();
+				}
 			}
-		}
 
+		}
 	}
 
 	private static void mostrarMagosConPuntuacion() {
@@ -92,8 +105,41 @@ public class App {
 	}
 
 	private static void mostrarTop10Hechizos() {
-		// TODO Auto-generated method stub
+		ordenarHechizos();
+		boolean condicion = true;
+		int cont = 1;
+		System.out.println(" - - - TOP 10 MEJORES HECHIZOS - - -");
+		System.out.println("");
 
+		while (condicion) {
+			for (Hechizo hechizo : hechizos) {
+				System.out
+						.println(cont + ") " + hechizo.getNombre() + " | Puntuación: " + hechizo.calcularPuntuacion());
+				cont++;
+
+				if (cont == 11) {
+					condicion = false;
+					break;
+				}
+			}
+
+		}
+
+	}
+
+	private static void ordenarHechizos() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < hechizos.size() - 1; i++) {
+			for (int j = 0; j < hechizos.size() - 1 - i; j++) {
+
+				if (hechizos.get(j).calcularPuntuacion() < hechizos.get(j + 1).calcularPuntuacion()) {
+
+					Hechizo aux = hechizos.get(j);
+					hechizos.set(j, hechizos.get(j + 1));
+					hechizos.set(j + 1, aux);
+				}
+			}
+		}
 	}
 
 	private static void eliminarHechizo() {
@@ -133,15 +179,15 @@ public class App {
 
 		while (!condicion) {
 			try {
-				System.out.println(" - - - Menu de Analisis - - - ");
+				System.out.println("\n - - - Menu de Analisis - - - ");
 				System.out.println("\n1. Top 10 Mejores Hechizos\r\n" + "2. Top 3 Mejores Magos\r\n"
 						+ "3. Mostrar todos los Hechizos\r\n" + "4. Mostrar todos los magos\r\n"
 						+ "5. Mostrar todos los Hechizos junto a su puntuacion\r\n"
-						+ "6. Mostrar todos los magos junto a su puntuacion\r\n" + "");
+						+ "6. Mostrar todos los magos junto a su puntuacion" + "\n7. Salir");
 				System.out.print("> ");
 				opcion = s.nextInt();
 
-				if (opcion <= 6 && opcion >= 1) {
+				if (opcion <= 7 && opcion >= 1) {
 					condicion = true;
 				} else {
 					System.err.println("\nIngrese un valor valido.");
@@ -165,13 +211,13 @@ public class App {
 
 		while (!condicion) {
 			try {
-				System.out.println(" - - - Menu de Administrador - - - ");
+				System.out.println("\n - - - Menu de Administrador - - - ");
 				System.out.println("\n1. Agregar Mago\r\n" + "2. Modificar Mago\r\n" + "3. Eliminar Mago\r\n"
-						+ "4. Agregar Hechizo\r\n" + "5. Modificar Hechizo\r\n" + "6. Eliminar Hechizo");
+						+ "4. Agregar Hechizo\r\n" + "5. Modificar Hechizo\r\n" + "6. Eliminar Hechizo" + "\n7. Salir");
 				System.out.print("> ");
 				opcion = s.nextInt();
 
-				if (opcion <= 6 && opcion >= 1) {
+				if (opcion <= 7 && opcion >= 1) {
 					condicion = true;
 				} else {
 					System.err.println("\nIngrese un valor valido.");

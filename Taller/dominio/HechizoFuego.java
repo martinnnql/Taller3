@@ -27,6 +27,8 @@ public class HechizoFuego extends Hechizo implements Calculador {
 	}
 
 
+
+
 	
 
 	
