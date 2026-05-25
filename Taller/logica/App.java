@@ -17,21 +17,19 @@ public class App {
 	public static void main(String[] args) throws IOException {
 		cargarHechizos();
 		cargarMagos();
-		
-		
-		
+
 		boolean condicion = false;
 		int opcionMenu1 = cargarMenu1();
 
 		while (!condicion) {
 			if (opcionMenu1 == 1) {
 				int opcionMenuAdmin = cargarMenuAdmin();
-				
+
 				if (opcionMenuAdmin == 7) {
 					System.out.println("Saliendo . . .");
 					condicion = true;
 				}
-				
+
 				if (opcionMenuAdmin == 1) {
 					agregarMago();
 
@@ -54,12 +52,12 @@ public class App {
 
 			if (opcionMenu1 == 2) {
 				int opcionMenuAnalista = cargarMenuAnalista();
-				
+
 				if (opcionMenuAnalista == 7) {
 					System.out.println("Saliendo . . .");
 					condicion = true;
 				}
-				
+
 				if (opcionMenuAnalista == 1) {
 					mostrarTop10Hechizos();
 
@@ -90,7 +88,7 @@ public class App {
 		System.out.println();
 		for (Mago mago : magos) {
 			System.out.println(cont + ") " + mago.getNombre() + " | Puntuación: " + mago.calcularPuntuacion());
-			cont ++;
+			cont++;
 		}
 	}
 
@@ -101,7 +99,7 @@ public class App {
 		System.out.println();
 		for (Hechizo hechizo : hechizos) {
 			System.out.println(cont + ") " + hechizo.getNombre() + " | Puntuación: " + hechizo.calcularPuntuacion());
-			cont ++;
+			cont++;
 		}
 	}
 
@@ -112,7 +110,7 @@ public class App {
 		System.out.println();
 		for (Mago mago : magos) {
 			System.out.println(cont + ") " + mago.getNombre());
-			cont ++;
+			cont++;
 		}
 
 	}
@@ -124,7 +122,7 @@ public class App {
 		System.out.println();
 		for (Hechizo hechizo : hechizos) {
 			System.out.println(cont + ") " + hechizo.getNombre());
-			cont ++;
+			cont++;
 		}
 
 	}
@@ -149,7 +147,6 @@ public class App {
 			}
 
 		}
-		
 
 	}
 
@@ -164,7 +161,7 @@ public class App {
 					magos.set(j + 1, aux);
 				}
 			}
-		}		
+		}
 	}
 
 	private static void mostrarTop10Hechizos() {
@@ -225,67 +222,155 @@ public class App {
 
 	}
 
-	private static void modificarMago() {
+	private static void modificarMago() throws IOException {
 		// TODO Auto-generated method stub
+		Scanner s = new Scanner(System.in);
+		boolean condicion = false;
+		int opcion = 0;
+		System.out.println("- - - MODIFICAR MAGO - - - ");
 
+		mostrarMagos();
+		
+		System.out.println("Ingrese el nombre de uno de los magos para modificar: ");
+		System.out.print("> ");
+		String nombreMago = s.nextLine();
+		
+		Mago magoSeleccionado = buscarMago(nombreMago);
+		
+		
+		while (!condicion) {
+			try {
+				System.out.println("\n¿Qué desea modficar? \nSeleccione una opción: ");
+				System.out.println("1) Modificar nombre");
+				System.out.println("2) Modificar hechizos");
+				System.out.println("3) Salir");
+				opcion = s.nextInt();
+				s.nextLine();
+				
+				if (opcion >= 1 && opcion <= 3) {
+					condicion = true;
+					
+				} else if (opcion == 3) {
+					System.out.println("Saliendo . . .");
+					
+				}else {
+					System.err.println("Ingrese un valor valido.");
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.err.println("Ingrese un valor valido.");
+				s.nextLine();
+			}
+			
+		}
+		if (opcion == 1) {
+			modificarNombre(magoSeleccionado);
+		} else if (opcion == 2) {
+			modificarHechizos();
+		}
+		
 	}
+
+	private static void modificarHechizos() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void modificarNombre(Mago magoSeleccionado) throws IOException {
+		Scanner s = new Scanner(System.in);
+
+		System.out.println("Indique el nuevo nombre del mago: " + magoSeleccionado.getNombre());
+		System.out.print("> ");
+		String nuevoNombre = s.nextLine();
+		
+		// cambiar nombre en txt
+		BufferedWriter bf = new BufferedWriter(new FileWriter("Magos.txt"));
+		String linea = nuevoNombre + ";";
+		
+		for (int i = 0; i < magoSeleccionado.getHechizos().size(); i++) {
+
+			linea += magoSeleccionado.getHechizos().get(i).getNombre();
+
+			if (i < magoSeleccionado.getHechizos().size() - 1) {
+				linea += "|";
+			}
+		}
+		// FALTA TERMINAR AQUI, ARREGLAR ERROR DE QUE SE BORRA TODO EL TXT AL CAMBIAR EL NOMBRE
+		
+		bf.newLine();
+		bf.write(linea);
+		bf.close();
+		
+		
+		System.out.println("Nombre cambiado con exito!");
+		
+		
+	}
+
+	private static Mago buscarMago(String nombreMago) {
+		for (Mago mago : magos) {
+			if (nombreMago.equalsIgnoreCase(mago.getNombre())) {
+				return mago;
+			}
+		}
+		return null;
+	}
+
 
 	private static void agregarMago() throws IOException {
 		// TODO Auto-generated method stub
 		Scanner s = new Scanner(System.in);
-		
+
 		System.out.println("- - - NUEVO MAGO - - - ");
 		System.out.println("\nIngrese el nombre del mago: ");
 		System.out.print("> ");
 		String nombreNuevoMago = s.nextLine();
-	
+
 		int cantHechizos = cantHechizos();
-		
+
 		// mostrar hechizos numerados para escoger
 		int cont = 1;
 		System.out.println(" - - - HECHIZOS - - - ");
 		System.out.println();
 		for (Hechizo hechizo : hechizos) {
 			System.out.println(cont + ") " + hechizo.getNombre());
-			cont ++;
+			cont++;
 		}
 		System.out.println("\nIngrese el nombre de  " + cantHechizos + " hechizos para el mago: ");
-		
+
 		ArrayList<Hechizo> hechizosMago = new ArrayList<>();
 
-		
 		for (int i = 0; i < cantHechizos; i++) {
 			System.out.print("> ");
 			String nombreHechizo = s.nextLine();
-			
-			Hechizo hechizoN = buscarHechizo(nombreHechizo);
-			
-				hechizosMago.add(hechizoN);
 
-			
+			Hechizo hechizoN = buscarHechizo(nombreHechizo);
+
+			hechizosMago.add(hechizoN);
+
 		}
-		
+
 		Mago nuevoMago = new Mago(nombreNuevoMago, hechizosMago);
 		magos.add(nuevoMago);
-		
+
 		// guardar mago
-		BufferedWriter  bf = new BufferedWriter(new FileWriter("Magos.txt", true));
+		BufferedWriter bf = new BufferedWriter(new FileWriter("Magos.txt", true));
 		String linea = nombreNuevoMago + ";";
-		
+
 		for (int i = 0; i < hechizosMago.size(); i++) {
-			
+
 			linea += hechizosMago.get(i).getNombre();
-			
-			if (i< hechizosMago.size() - 1) {
+
+			if (i < hechizosMago.size() - 1) {
 				linea += "|";
 			}
 		}
 		bf.newLine();
-		bf.write(linea);	
+		bf.write(linea);
 		bf.close();
-		
+
 		System.out.println("Mago creado con exito !!");
-		
+
 	}
 
 	private static int cantHechizos() {
@@ -298,20 +383,20 @@ public class App {
 				System.out.print("> ");
 				cantHechizos = s.nextInt();
 				s.nextLine();
-				
+
 				if (cantHechizos <= hechizos.size() && cantHechizos >= 1) {
 					condicion = true;
 				} else if (cantHechizos < 1) {
 					System.err.println("\nUn mago debe conocer al menos 1 hechizo!!");
-					
+
 				} else if (cantHechizos > hechizos.size()) {
 					System.err.println("\nSolo existen " + hechizos.size() + " hechizos!");
 				}
-					
+
 			} catch (Exception e) {
 				System.err.println("\nIngrese un valor valido.");
-				s.nextLine();			
-				}
+				s.nextLine();
+			}
 		}
 
 		return cantHechizos;
