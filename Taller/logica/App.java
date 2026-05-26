@@ -209,7 +209,7 @@ public class App {
 		if (opcion == 1) {
 			modificarNombre(magoSeleccionado);
 		} else if (opcion == 2) {
-			modificarHechizos();
+			modificarHechizos(magoSeleccionado);
 		} else {
 			System.out.println("Saliendo . . .");
 		}
@@ -217,8 +217,77 @@ public class App {
 		
 	}
 
-	private static void modificarHechizos() {
+	private static void modificarHechizos(Mago magoSeleccionado) {		
+		// mostrar hechizos del mago
+		
+		System.out.println("Hechizos del mago " + magoSeleccionado.getNombre() + "\n");
+		sys.mostrarHechizosMago(magoSeleccionado);
+		
+		// menu con las opciones: 1) Eliminar hechizo, 2) Agregar hechizo, 3) Salir.
+		String opcion = "";
+		do {
+			System.out.println("\nQue desea hacer?");
+			System.out.println("\n1) Eliminar Hechizo. \n2) Agregar Hechizo \n3) Salir");
+			System.out.print("> ");
+			opcion = s.nextLine();
+			
+			if (opcion.equals("1")) {
+				eliminarHechizo(magoSeleccionado);
+			} else if (opcion.equals("2")) {
+				agregarHechizoAMago(magoSeleccionado);
+			} else {
+				System.out.println("Saliendo . . .");
+			}
+			
+		} while (!opcion.equals("3"));
+		
+		
+		
+	}
+
+	private static void agregarHechizoAMago(Mago magoSeleccionado) {
 		// TODO Auto-generated method stub
+		
+		sys.mostrarHechizos();
+		
+		System.out.println("\nIndique la cantidad de hechizos a agregar: ");
+		int cantAgregar = s.nextInt();
+		s.nextLine();
+		
+		System.out.println(sys.mostrarHechizos());
+		
+		for (int i = 0; i < cantAgregar; i++) {
+			System.out.println("\nIngrese el nombre del hechizo número " + (i+1)+ ": ");
+			System.out.print("> ");
+			String nombreHechizo = s.nextLine();
+			
+			Hechizo hechizoSeleccionado = sys.buscarHechizo(nombreHechizo);
+			
+			magoSeleccionado.añadirHechizo(hechizoSeleccionado);
+			
+			// Hacer cambios dentro del txt
+			
+			
+			
+			
+		}
+		
+		System.out.println("Cambio realizado con exito!!");
+		
+		
+		
+		
+	}
+
+	private static void eliminarHechizo(Mago magoSeleccionado) {
+		// TODO Auto-generated method stub
+		System.out.println("Escriba el nombre del hechizo que desea eliminar: ");
+		System.out.print("> ");
+		String hechizoAEliminar = s.nextLine();
+				
+		// eliminar del txt
+		
+		
 		
 	}
 

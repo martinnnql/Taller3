@@ -184,6 +184,18 @@ public class SystemImpl implements ISystem {
 		}
 	
 	}
+
+	@Override
+	public void mostrarHechizosMago(Mago magoSeleccionado) {
+		int cont = 1;
+		
+		for (Hechizo hechizo : magoSeleccionado.getHechizos()) {
+			System.out.println(cont + ") " + hechizo.getNombre());
+			cont++;
+		}
+		
+		
+	}
 	
 	
 

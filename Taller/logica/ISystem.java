@@ -31,4 +31,6 @@ public interface ISystem {
 	String mostrarTop3Magos();
 
 	void mostrarHechizosConPuntacion();
+
+	void mostrarHechizosMago(Mago magoSeleccionado);
 }
