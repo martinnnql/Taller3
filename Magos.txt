@@ -12,5 +12,5 @@ Estefania;Hoja Afilada|Burbuja|Acua Jet|Energibola|Fuego Sagrado|Agua Lodosa|Lla
 Churrasquita;Origen Pulso|Infierno|Silvato|Hoja Mágica|Colmillo Igneo
 Clapt;Pulso de Agua|Giro Fuego|Pedrada
 Rabi;Latigazo|Absorber|Vórtice Ígneo|Avalancha|Rueda Fuego|Tormenta de Arena
-Pepe;Patada Ígnea|Acua Jet|Huesomerang|Clorofila|Fogonazo|Polen Somnífero|Torbellino
+Pepe;Patada Ígnea|Clorofila|Fogonazo|Polen Somnífero|Torbellino|Bucle Arena|Mazazo|Latigazo
 Papulini;Fuego Sagrado|Absorber|Infierno

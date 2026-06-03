@@ -162,6 +162,7 @@ public class App {
 
 	private static void eliminarMago() {
 		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -246,15 +247,35 @@ public class App {
 	}
 
 	private static void agregarHechizoAMago(Mago magoSeleccionado) {
-		// TODO Auto-generated method stub
-		
 		sys.mostrarHechizos();
 		
-		System.out.println("\nIndique la cantidad de hechizos a agregar: ");
-		int cantAgregar = s.nextInt();
-		s.nextLine();
+		int cantAgregar = 0;
+		boolean condicion = false;
+		
+		while (!condicion) {
+			try {
+				System.out.println("\nIndique la cantidad de hechizos a agregar: ");
+				System.out.print("> ");
+				cantAgregar = s.nextInt();
+				s.nextLine();
+
+				if (cantAgregar <= sys.cantHechizos() && cantAgregar >= 1) {
+					condicion = true;
+				} else if (cantAgregar < 1) {
+					System.err.println("\nDebes agregar al menos 1 hechizo!");
+
+				} else if (cantAgregar > sys.cantHechizos()) {
+					System.err.println("\nSolo existen " + sys.cantHechizos() + " hechizos!");
+				}
+
+			} catch (Exception e) {
+				System.err.println("\nIngrese un valor valido.");
+				s.nextLine();
+			}
+		}
 		
 		System.out.println(sys.mostrarHechizos());
+		
 		
 		for (int i = 0; i < cantAgregar; i++) {
 			System.out.println("\nIngrese el nombre del hechizo número " + (i+1)+ ": ");
@@ -263,32 +284,115 @@ public class App {
 			
 			Hechizo hechizoSeleccionado = sys.buscarHechizo(nombreHechizo);
 			
-			magoSeleccionado.añadirHechizo(hechizoSeleccionado);
-			
-			// Hacer cambios dentro del txt
-			
-			
-			
-			
+			if (hechizoSeleccionado != null) {
+				magoSeleccionado.añadirHechizo(hechizoSeleccionado);
+			} else {
+				System.err.println("¡El hechizo no existe!");
+			}
 		}
 		
-		System.out.println("Cambio realizado con exito!!");
 		
-		
-		
-		
+		try {
+			ArrayList<String> lineas = new ArrayList<>();
+			BufferedReader br = new BufferedReader(new FileReader("Magos.txt"));
+			String linea;
+			
+			while ((linea = br.readLine()) != null) {
+				String[] partes = linea.split(";");
+				String nombreMago = partes[0];
+				
+				if (nombreMago.equalsIgnoreCase(magoSeleccionado.getNombre())) {
+					String nuevaLinea = magoSeleccionado.getNombre() + ";";
+					
+					for (int j = 0; j < magoSeleccionado.getHechizos().size(); j++) {
+						nuevaLinea += magoSeleccionado.getHechizos().get(j).getNombre();
+						
+						if (j < magoSeleccionado.getHechizos().size() - 1) {
+							nuevaLinea += "|";
+						}
+					}
+					lineas.add(nuevaLinea);
+				} else {
+					//Si es otro mago se guarda la linea tal cual
+					lineas.add(linea);
+				}
+			}
+			br.close();
+			
+			
+			BufferedWriter bw = new BufferedWriter(new FileWriter("Magos.txt"));
+			for (String l : lineas) {
+				bw.write(l);
+				bw.newLine();
+			}
+			bw.close();
+			
+			System.out.println("¡Cambio realizado con éxito!");
+			
+		} catch (IOException e) {
+			System.err.println("Error al actualizar el archivo: " + e.getMessage());
+		}
 	}
 
 	private static void eliminarHechizo(Mago magoSeleccionado) {
-		// TODO Auto-generated method stub
 		System.out.println("Escriba el nombre del hechizo que desea eliminar: ");
 		System.out.print("> ");
 		String hechizoAEliminar = s.nextLine();
 				
-		// eliminar del txt
+		boolean eliminado = false;
+		for (int i = 0; i < magoSeleccionado.getHechizos().size(); i++) {
+			if (magoSeleccionado.getHechizos().get(i).getNombre().equalsIgnoreCase(hechizoAEliminar)) {
+				magoSeleccionado.getHechizos().remove(i);
+				eliminado = true;
+				break;
+			}
+		}
 		
-		
-		
+		if (!eliminado) {
+			System.err.println("El mago no posee ese hechizo.");
+			return; // Salimos del método si no se elimina nada
+		}
+
+		// Eliminar del txt y actualizar
+		try {
+			ArrayList<String> lineas = new ArrayList<>();
+			BufferedReader br = new BufferedReader(new FileReader("Magos.txt"));
+			String linea;
+			
+			while ((linea = br.readLine()) != null) {
+				String[] partes = linea.split(";");
+				String nombreMago = partes[0];
+				
+				if (nombreMago.equalsIgnoreCase(magoSeleccionado.getNombre())) {
+					String nuevaLinea = magoSeleccionado.getNombre() + ";";
+					
+					
+					for (int j = 0; j < magoSeleccionado.getHechizos().size(); j++) {
+						nuevaLinea += magoSeleccionado.getHechizos().get(j).getNombre();
+						
+						if (j < magoSeleccionado.getHechizos().size() - 1) {
+							nuevaLinea += "|";
+						}
+					}
+					lineas.add(nuevaLinea);
+				} else {
+					lineas.add(linea);
+				}
+			}
+			br.close();
+			
+			BufferedWriter bw = new BufferedWriter(new FileWriter("Magos.txt"));
+			for (String l : lineas) {
+				bw.write(l);
+				bw.newLine();
+			}
+			bw.close();
+			
+			System.out.println("¡Hechizo eliminado con éxito!");
+			
+		} catch (IOException e) {
+			System.err.println("Error al actualizar el archivo: " + e.getMessage());
+		}
 	}
 
 	private static void modificarNombre(Mago magoSeleccionado) throws IOException {
@@ -346,8 +450,6 @@ public class App {
 		
 		
 	}
-
-
 
 	private static void agregarMago() throws IOException {
 		// TODO Auto-generated method stub
