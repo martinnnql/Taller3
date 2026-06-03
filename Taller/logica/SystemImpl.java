@@ -196,6 +196,17 @@ public class SystemImpl implements ISystem {
 		
 		
 	}
+
+	@Override
+	public void eliminarMago(String nombre) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < magos.size(); i++) {
+			if (magos.get(i).getNombre().equals(nombre)) {
+				magos.remove(i);
+				break;
+			}
+		}
+	}
 	
 	
 

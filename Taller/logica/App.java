@@ -162,7 +162,56 @@ public class App {
 
 	private static void eliminarMago() {
 		// TODO Auto-generated method stub
+		System.out.println("- - - ELIMINAR MAGO - - - ");
+
+		System.out.println(sys.mostrarMagos());
 		
+		System.out.println("Ingrese el nombre de uno de los magos para eliminar: ");
+		System.out.print("> ");
+		String nombreMago = s.nextLine();
+		
+		Mago magoSeleccionado = sys.buscarMago(nombreMago);
+		
+		if (magoSeleccionado == null) {
+			System.err.println("El mago no existe!");
+			return;
+		}
+		
+		sys.eliminarMago(magoSeleccionado.getNombre());
+		
+		// Eliminar mago del txt
+		try {
+			ArrayList<String> lineas = new ArrayList<>();
+			BufferedReader br = new BufferedReader(new FileReader("Magos.txt"));
+			String linea;
+			
+			while ((linea = br.readLine()) != null) {
+				String[] partes = linea.split(";");
+				String nombreMagoTxt = partes[0];
+				
+				
+				if (nombreMagoTxt.equalsIgnoreCase(magoSeleccionado.getNombre())) {
+					continue; // Salta el mago
+				}
+				
+				// Si es cualquier otro mago c guarda
+				lineas.add(linea);
+			}
+			br.close();
+			
+			
+			BufferedWriter bw = new BufferedWriter(new FileWriter("Magos.txt"));
+			for (String l : lineas) {
+				bw.write(l);
+				bw.newLine();
+			}
+			bw.close();
+			
+			System.out.println("¡Mago eliminado con éxito!");
+			
+		} catch (IOException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
 
 	}
 
