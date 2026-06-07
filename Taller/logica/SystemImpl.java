@@ -207,6 +207,19 @@ public class SystemImpl implements ISystem {
 			}
 		}
 	}
+
+	@Override
+	public void eliminarHechizo(String nombre) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < hechizos.size(); i++) {
+			if (hechizos.get(i).getNombre().equals(nombre)) {
+				hechizos.remove(i);
+				break;
+			}
+			
+		}
+		
+	}
 	
 	
 

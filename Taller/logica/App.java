@@ -143,7 +143,65 @@ public class App {
 
 	private static void eliminarHechizo() {
 		// TODO Auto-generated method stub
+		System.out.println("- - - ELIMINADOR DE HECHIZOS - - -");
+		System.out.println("Bienvenido al eliminador de hechizos!");
+		System.out.println();
+		
+		System.out.println(sys.mostrarHechizos());
+		
+		System.out.println("\nIngrese el nombre del hechizo que desea eliminar");
+		System.out.print("> ");
+		String nombreHechizoEliminar = s.nextLine();
+		
+		Hechizo hechizoSeleccionado = sys.buscarHechizo(nombreHechizoEliminar);
+		
+		if (hechizoSeleccionado == null) {
+			System.err.println("Ese hechizo no existe!");
+			return;
+		}
+		
+		sys.eliminarHechizo(hechizoSeleccionado.getNombre());
+		
+		// Eliminar hechizo del txt
+		try {
+			ArrayList<String> lineas = new ArrayList<>();
+			BufferedReader br = new BufferedReader(new FileReader("Hechizos.txt"));
+			String linea;
 
+			while ((linea = br.readLine()) != null) {
+				
+				if (linea.trim().isEmpty()) {
+	                continue; 
+	            }
+				
+				String[] partes = linea.split(";");
+				String nombreHechizoTxt = partes[0];
+
+				if (nombreHechizoTxt.equalsIgnoreCase(hechizoSeleccionado.getNombre())) {
+					continue;
+				}
+
+				lineas.add(linea);
+			}
+			br.close();
+
+			BufferedWriter bw = new BufferedWriter(new FileWriter("Hechizos.txt"));
+			
+			for (int i = 0; i < lineas.size(); i++) {
+	            bw.write(lineas.get(i));
+	            
+	            if (i < lineas.size() - 1) {
+	                bw.newLine();
+	            }
+	        }
+			bw.close();
+
+			System.out.println("¡Hechizo eliminado con éxito!");
+
+		} catch (IOException e) {
+			
+		}
+		
 	}
 
 	private static void modificarHechizo() {
@@ -167,11 +225,11 @@ public class App {
 			try {
 				System.out.println("Ingrese el tipo del hechizo (Fuego, Agua, Tierra o Planta)");
 				System.out.print("> ");
-				tipoHechizoNuevo = s.nextLine();
+				tipoHechizoNuevo = s.nextLine().toLowerCase();
 
-				if (tipoHechizoNuevo.toLowerCase().equals("fuego") || tipoHechizoNuevo.toLowerCase().equals("tierra")
-						|| tipoHechizoNuevo.toLowerCase().equals("agua")
-						|| tipoHechizoNuevo.toLowerCase().equals("planta")) {
+				if (tipoHechizoNuevo.equals("fuego") || tipoHechizoNuevo.equals("tierra")
+						|| tipoHechizoNuevo.equals("agua")
+						|| tipoHechizoNuevo.equals("planta")) {
 					condicion = true;
 				} else {
 					System.err.println("\nIngrese un tipo entre Fuego, Agua, Tierra o Planta !!");
@@ -181,35 +239,150 @@ public class App {
 			} catch (Exception e) {
 				System.err.println("Ha ocurrido un error al elegir el tipo.");
 			}
+			
+			int cantDañoNuevo;
+			
+			do {
+				System.out.println("Ingrese la cantidad de daño que hace el hechizo:");
+				System.out.print("> ");
+				cantDañoNuevo = s.nextInt();
+				s.nextLine();
+				
+				
+				if (cantDañoNuevo < 0) {
+					System.err.println("El daño no puede ser menor a 0!");
+				}
+			} while (cantDañoNuevo < 0 );
+			
+			String lineaArchivo = "";
+			
 			switch (tipoHechizoNuevo) {
 			case "fuego":
-				int cantDañoNuevo;
-				int cantDañoQuemadura;
+			
+				int cantDañoQuemaduraNuevo;
 				do {
-					System.out.println("Ingrese la cantidad de daño que hace el hechizo:");
+					
+					System.out.println("Ingrese la cantidad de daño por quemadura que hace el hechizo:");
 					System.out.print("> ");
-					cantDañoNuevo = s.nextInt();
+					cantDañoQuemaduraNuevo = s.nextInt();
 					s.nextLine();
-
-					if (cantDañoNuevo < 0) {
+					
+					if (cantDañoQuemaduraNuevo < 0) {
 						System.err.println("El daño no puede ser menor a 0!");
 					}
-				} while (cantDañoNuevo < 0);
+				} while (cantDañoQuemaduraNuevo < 0);
+				
+				Hechizo nuevoHechizoFuego = new HechizoFuego(nombreNuevoHechizo, tipoHechizoNuevo, cantDañoNuevo, cantDañoQuemaduraNuevo);
+				sys.añadirHechizo(nuevoHechizoFuego);
+				
+				lineaArchivo = nombreNuevoHechizo + ";Fuego;" + cantDañoNuevo + ";" + cantDañoQuemaduraNuevo;
+				
+				System.out.println("Hechizo de fuego creado correctamente!");
+				break;
+			case "agua":
+				int CantidadHealNuevo;
+				int PresionDelAguaNuevo;
+				do {
+					
+					System.out.println("Ingrese la cantidad de heal que aplica el hechizo:");
+					System.out.print("> ");
+					CantidadHealNuevo = s.nextInt();
+					s.nextLine();
+					
+					System.out.println("Ingrese la presion del agua del hechizo:");
+					System.out.print("> ");
+					PresionDelAguaNuevo = s.nextInt();
+					s.nextLine();
+					
+					
+					if (CantidadHealNuevo < 0 || PresionDelAguaNuevo < 0 ) {
+						System.err.println("Los valores no pueden ser negativos!");
+					}
+				} while (CantidadHealNuevo < 0 || PresionDelAguaNuevo < 0 );
+				
+				Hechizo nuevoHechizoAgua = new HechizoAgua(nombreNuevoHechizo, tipoHechizoNuevo, cantDañoNuevo, CantidadHealNuevo, PresionDelAguaNuevo);
+				sys.añadirHechizo(nuevoHechizoAgua);
+				
+				lineaArchivo = nombreNuevoHechizo + ";Agua;" + cantDañoNuevo + ";" + CantidadHealNuevo + "," + PresionDelAguaNuevo;
+				
+				System.out.println("Hechizo de agua creado correctamente!");
+				
+				break;
+			case "tierra":
+				int cantDefensaNuevo;
+				do {
+					
+					System.out.println("Ingrese la cantidad de defensa que entregará el hechizo:");
+					System.out.print("> ");
+					cantDefensaNuevo = s.nextInt();
+					s.nextLine();
+					
+					if (cantDefensaNuevo < 0) {
+						System.err.println("El hechizo nno puede dar una defensa menor a 0!");
+					}
+				} while (cantDefensaNuevo < 0);
+				
+				Hechizo nuevoHechizoTierra = new HechizoTierra(nombreNuevoHechizo, tipoHechizoNuevo, cantDañoNuevo, cantDefensaNuevo);
+				sys.añadirHechizo(nuevoHechizoTierra);
+				
+				lineaArchivo = nombreNuevoHechizo + ";Tierra;" + cantDañoNuevo + ";" + cantDefensaNuevo;
+				
+				System.out.println("Hechizo de tierra creado correctamente!");
+				
+				break;
+			case "planta":
+				int DuracionStunNuevo;
+				int CantPlantasNuevo;
+				do {
+					
+					System.out.println("Ingrese la cantidad de tiempo de Stunt que aplica el hechizo:");
+					System.out.print("> ");
+					DuracionStunNuevo = s.nextInt();
+					s.nextLine();
+					
+					System.out.println("Ingrese la cantidad de plantas que genera el hechizo:");
+					System.out.print("> ");
+					CantPlantasNuevo = s.nextInt();
+					s.nextLine();
+					
+					
+					if (DuracionStunNuevo < 0 || CantPlantasNuevo < 0 ) {
+						System.err.println("Los valores no pueden ser negativos!");
+					}
+				} while (DuracionStunNuevo < 0 || CantPlantasNuevo < 0 );
 				
 				
+				Hechizo nuevoHechizoPlanta = new HechizoPlanta(nombreNuevoHechizo, tipoHechizoNuevo, cantDañoNuevo, DuracionStunNuevo, CantPlantasNuevo);
+				sys.añadirHechizo(nuevoHechizoPlanta);
 				
+				lineaArchivo = nombreNuevoHechizo + ";Planta;" + cantDañoNuevo + ";" + DuracionStunNuevo + "," + CantPlantasNuevo;
 				
-				
-				
-				
+				System.out.println("Hechizo de planta creado correctamente!");
 				
 				
 				break;
 
 			default:
-				break;
+				System.err.println("\nIngrese un tipo entre Fuego, Agua, Tierra o Planta !!");
+				
 			}
-
+			
+			//Agregar hechizos al txt
+			if (!lineaArchivo.isEmpty()) {
+				try {
+					
+					FileWriter fw = new FileWriter("Hechizos.txt", true);
+					BufferedWriter bw = new BufferedWriter(fw);
+					
+					bw.newLine();
+					bw.write(lineaArchivo);
+					bw.close();
+					
+					
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
 		}
 
 	}
@@ -262,7 +435,7 @@ public class App {
 			System.out.println("¡Mago eliminado con éxito!");
 
 		} catch (IOException e) {
-			System.err.println("Error: " + e.getMessage());
+			
 		}
 
 	}

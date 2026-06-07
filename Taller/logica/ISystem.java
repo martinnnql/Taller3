@@ -35,4 +35,6 @@ public interface ISystem {
 	void mostrarHechizosMago(Mago magoSeleccionado);
 
 	void eliminarMago(String nombre);
+
+	void eliminarHechizo(String nombre);
 }
