@@ -83,8 +83,9 @@ Envite Igneo;Fuego;47;4
 Patada Ígnea;Fuego;82;1
 Fuego Sagrado;Fuego;38;5
 Hoja Mágica;Planta;52;1,10
-Mazazo;Planta;105;1,2
+Mazapan;Fuego;666;777
 Ataque Arena;Tierra;102;40
 Tierra Viva;Tierra;46;36
 Origen Pulso;Agua;21;30,208
 Bucle Arena;Planta;15;2,8
+gg;Fuego;0;323
